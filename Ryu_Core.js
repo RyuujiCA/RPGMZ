@@ -11,8 +11,8 @@
  * @param separator1
  * @text Auto Update
  * 
- * @param Auto-Update
- * @text Update the Core automatically
+ * @param AutoUpdate
+ * @text Auto-Update
  * @type boolean
  * @default true
  * @desc Update Ryu_Core file automatically through github
@@ -63,12 +63,13 @@ if (typeof PluginManager !== 'undefined' && PluginManager.parameters) {
 /* ========================================================================== */
 /*                                AUTO UPDATE                                 */
 /* ========================================================================== */
+Ryu.Core.AutoUpdate = Ryu.Core.parameters['AutoUpdate'] || false;
 
-(function () {
+Ryu.Core.UpdateScripts = function() {
     const scripts = [
-        { name: 'Ryu_Core', url: 'https://github.com/RyuujiCA/RPGMZ/blob/main/Ryu_Core.js' },
-        // { name: 'Ryu_ChangeBG', url: 'https://raw.githubusercontent.com/username/RPGMakerMZ-Scripts/main/Ryu_ChangeBG.js' },
-        { name: 'Ryu_AfkTimeCollector', url: 'https://github.com/RyuujiCA/RPGMZ/blob/main/Ryu_AfkTimeCollector.js' }
+        { name: 'Ryu_Core', url: 'https://raw.githubusercontent.com/RyuujiCA/RPGMZ/main/Ryu_Core.js' },
+        //{ name: 'Ryu_ChangeBG', url: 'https://raw.githubusercontent.com/username/RPGMakerMZ-Scripts/main/Ryu_ChangeBG.js' },
+        { name: 'Ryu_AfkTimeCollector', url: 'https://raw.githubusercontent.com/RyuujiCA/RPGMZ/main/Ryu_AfkTimeCollector.js' }
     ];
 
     function downloadScript(script) {
@@ -90,18 +91,28 @@ if (typeof PluginManager !== 'undefined' && PluginManager.parameters) {
     }
 
     function updateScripts() {
+        let updated = false;
         const promises = scripts.map(script => downloadScript(script).then(content => {
             const filename = `${script.name}.js`;
             const path = require('path');
             const fs = require('fs');
             const scriptPath = path.join(process.cwd(), 'js/plugins', filename);
-            fs.writeFileSync(scriptPath, content);
-            console.log(`Updated ${filename}`);
+            const currentContent = fs.existsSync(scriptPath) ? fs.readFileSync(scriptPath, 'utf8') : null;
+
+            if (currentContent !== content) {
+                fs.writeFileSync(scriptPath, content);
+                console.log(`Updated ${filename}`);
+                updated = true;
+            }
         }));
 
         Promise.all(promises).then(() => {
-            console.log('All scripts updated successfully.');
-            // Reload plugins or refresh the game as needed
+            if (updated) {
+                console.log('Scripts updated successfully.');
+                // TODO : Reload the game after update scripts
+            } else {
+                console.log('All scripts are already up to date.');
+            }
         }).catch(error => {
             console.error(`Error updating scripts: ${error.message}`);
         });
@@ -109,7 +120,7 @@ if (typeof PluginManager !== 'undefined' && PluginManager.parameters) {
 
     // Call the update function when the game starts
     updateScripts();
-})();
+};
 
 /* ========================================================================== */
 /*                             CORE UTILITIES                                 */
@@ -189,6 +200,15 @@ PluginManager.registerCommand('Ryu_CORE', 'SetAlias', args => {
             throw new Error(`Unknown type: ${type}`);
     }
 });
+
+/* ========================================================================== */
+/*                             AUTO UPDATE FILES                              */
+/* ========================================================================== */
+if (Ryu.Core.AutoUpdate === true) {
+    Ryu.Core.UpdateScripts();
+} else {
+    Ryu.Utils.log("Auto Update inactive!");
+}
 
 // Example of registering a command to set variable alias V
 /*PluginManager.registerCommand('Ryu_CORE', 'SetAliasVariable', args => {
