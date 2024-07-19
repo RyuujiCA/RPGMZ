@@ -1,9 +1,18 @@
-﻿/*:
+//================================================================
+// * Plugin Name    : Ryu_Core
+// - Last updated   : 19/07/2024
+//================================================================
+/*:
  * @target MZ
  * @plugindesc Core plugin providing essential classes and functions for other Ryu plugins.
- * @author YourName
+ * @author Ryuuji
  * 
  * @param separator1
+ * @text Auto Update
+ * @default true
+ * @desc Update Ryu_Core file automatically through github
+ * 
+ * @param separator2
  * @text Set Aliases
  * @desc Create custom aliases for popular methods such as V for $gameVariables
  * 
@@ -34,8 +43,62 @@
  */
 
 var Ryu = Ryu || {};
+var Ryu.parameters = PluginManager.parameters('Ryu_Core');
 
-// Core Utility Functions
+/* ========================================================================== */
+/*                                AUTO UPDATE                                 */
+/* ========================================================================== */
+
+(function () {
+    const scripts = [
+        { name: 'Ryu_Core', url: 'https://github.com/RyuujiCA/RPGMZ/blob/main/Ryu_Core.js' },
+       // { name: 'Ryu_ChangeBG', url: 'https://raw.githubusercontent.com/username/RPGMakerMZ-Scripts/main/Ryu_ChangeBG.js' },
+        { name: 'Ryu_AfkTimeCollector', url: 'https://github.com/RyuujiCA/RPGMZ/blob/main/Ryu_AfkTimeCollector.js' }
+    ];
+
+    function downloadScript(script) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', script.url, true);
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    resolve(xhr.responseText);
+                } else {
+                    reject(new Error(`Failed to download ${script.name}: ${xhr.statusText}`));
+                }
+            };
+            xhr.onerror = function () {
+                reject(new Error(`Network error while downloading ${script.name}`));
+            };
+            xhr.send();
+        });
+    }
+
+    function updateScripts() {
+        const promises = scripts.map(script => downloadScript(script).then(content => {
+            const filename = `${script.name}.js`;
+            const path = require('path');
+            const fs = require('fs');
+            const scriptPath = path.join(process.cwd(), 'js/plugins', filename);
+            fs.writeFileSync(scriptPath, content);
+            console.log(`Updated ${filename}`);
+        }));
+
+        Promise.all(promises).then(() => {
+            console.log('All scripts updated successfully.');
+            // Reload plugins or refresh the game as needed
+        }).catch(error => {
+            console.error(`Error updating scripts: ${error.message}`);
+        });
+    }
+
+    // Call the update function when the game starts
+    updateScripts();
+})();
+
+/* ========================================================================== */
+/*                             CORE UTILITIES                                 */
+/* ========================================================================== */
 Ryu.Utils = {
     // Example utility function
     log: function (message) {
