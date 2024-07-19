@@ -1,16 +1,22 @@
 //================================================================
 // * Plugin Name    : Ryu_Core
 // - Last updated   : 19/07/2024
+// - Curent Version : 0.1.03
 //================================================================
 /*:
  * @target MZ
- * @plugindesc Core plugin providing essential classes and functions for other Ryu plugins.
+ * @plugindesc V0.1.03 Core plugin providing essential classes and functions for other Ryu plugins.
  * @author Ryuuji
  * 
  * @param separator1
  * @text Auto Update
+ * 
+ * @param Auto-Update
+ * @text Update the Core automatically
+ * @type boolean
  * @default true
  * @desc Update Ryu_Core file automatically through github
+ * @parent separator1
  * 
  * @param separator2
  * @text Set Aliases
@@ -29,12 +35,14 @@
  * @default variable
  * @text Type
  * @desc The type of game object to alias.
+ * @parent separator2
  *
  * @arg alias
  * @type string
  * @default V
  * @text Alias
  * @desc The alias to use for the game object.
+ * @parent separator2
  * 
  * @help
  * This is the core plugin for Ryu plugins. It must be installed and placed above all other Ryu plugins.
@@ -43,7 +51,14 @@
  */
 
 var Ryu = Ryu || {};
-var Ryu.parameters = PluginManager.parameters('Ryu_Core');
+Ryu.Core = Ryu.Core || {};
+
+if (typeof PluginManager !== 'undefined' && PluginManager.parameters) {
+    Ryu.Core.parameters = PluginManager.parameters('Ryu_Core');
+} else {
+    console.error('PluginManager.parameters is not defined');
+}
+
 
 /* ========================================================================== */
 /*                                AUTO UPDATE                                 */
@@ -52,7 +67,7 @@ var Ryu.parameters = PluginManager.parameters('Ryu_Core');
 (function () {
     const scripts = [
         { name: 'Ryu_Core', url: 'https://github.com/RyuujiCA/RPGMZ/blob/main/Ryu_Core.js' },
-       // { name: 'Ryu_ChangeBG', url: 'https://raw.githubusercontent.com/username/RPGMakerMZ-Scripts/main/Ryu_ChangeBG.js' },
+        // { name: 'Ryu_ChangeBG', url: 'https://raw.githubusercontent.com/username/RPGMakerMZ-Scripts/main/Ryu_ChangeBG.js' },
         { name: 'Ryu_AfkTimeCollector', url: 'https://github.com/RyuujiCA/RPGMZ/blob/main/Ryu_AfkTimeCollector.js' }
     ];
 
