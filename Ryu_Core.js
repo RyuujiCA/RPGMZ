@@ -63,7 +63,7 @@ if (typeof PluginManager !== 'undefined' && PluginManager.parameters) {
 /* ========================================================================== */
 /*                                AUTO UPDATE                                 */
 /* ========================================================================== */
-Ryu.Core.AutoUpdate = Ryu.Core.parameters['AutoUpdate'] || false;
+Ryu.Core.AutoUpdate = Ryu.Core.parameters['AutoUpdate'] === 'true';
 
 Ryu.Core.UpdateScripts = function() {
     const scripts = [
