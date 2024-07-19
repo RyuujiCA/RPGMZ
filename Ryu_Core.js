@@ -1,11 +1,11 @@
 //================================================================
 // * Plugin Name    : Ryu_Core
 // - Last updated   : 19/07/2024
-// - Curent Version : 0.1.03
+// - Curent Version : 0.1.04b
 //================================================================
 /*:
  * @target MZ
- * @plugindesc V0.1.03 Core plugin providing essential classes and functions for other Ryu plugins.
+ * @plugindesc V0.1.04b Core plugin providing essential classes and functions for other Ryu plugins.
  * @author Ryuuji
  * 
  * @param separator1
