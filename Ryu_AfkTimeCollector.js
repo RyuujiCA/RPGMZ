@@ -5,7 +5,7 @@
 /*:
  * @target MZ
  * @plugindesc version 1.02 Timer collection for players when they go AFK.
- * @author Ryuuji/Artille
+ * @author Ryuuji
  * @help 
  *
  * Plugin Name    : Ryu_AfkTimeCollector
@@ -187,6 +187,21 @@
  * @desc Tracker will react if AFK value is higher than input (in seconds). Should not be lower than 2 seconds.
  * @default 30
  */
+
+var Ryu = Ryu || {};
+
+// Check if Ryu_CORE is loaded
+if (!Ryu || !Ryu.Utils || !Ryu.BaseMenu) {
+    throw new Error("Ryu_AfkTimeCollector requires Ryu_CORE.js to be loaded first.");
+} else {
+    Ryu.Core.Git = { name: 'Ryu_AfkTimeCollector', url: 'https://raw.githubusercontent.com/RyuujiCA/RPGMZ/main/Ryu_AfkTimeCollector.js' } || {};  // TODO implement cleaner logic
+    if (Ryu.Core.AutoUpdate === true) {
+        Ryu.Utils.update(Ryu.Core.Git.name, Ryu.Core.Git.url);
+    }/* else {
+        Ryu.Utils.log("Auto Update inactive!");
+    }*/
+}
+
 
 	PluginManager.registerCommand('Ryu_AfkTimeCollector', "TrackerInit", args => {
 	
