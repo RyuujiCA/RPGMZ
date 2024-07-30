@@ -16,6 +16,7 @@
  * 
  * v0.3.1
  * Aliasing now covers most (if not all) of objects and classes.
+ * Fixed plugin parameters to work the same as plugin command
  * Fixed promise not being ready to use
  * 
  * v0.2.xx
