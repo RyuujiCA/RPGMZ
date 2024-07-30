@@ -13,13 +13,25 @@
  * @help
  * This is the core plugin for Ryu plugins.
  * It must be installed and placed above all other Ryu plugins.
+ * 
+ * v0.3.1
+ * Aliasing now covers most (if not all) of objects and classes.
+ * Fixed promise not being ready to use
+ * 
+ * v0.2.xx
  * Will be automatically updated through github from now on.
+ * Fixed aliasing parsing errors
+ * Added a shared promise accross all plugins for aliasing usage in custom
+ * plugins
  *
+ * V0.1.xx
  * The core plugin allows to overwrite game objects call and simplifies the
  * syntaxes.
  * Call the command "SetAlias" and chose "variable", then set V (for example)
  * You will now be able to write v.value() and v.setValue() instead of
  * $gameVariables.value() and $gameVariables.setValue()
+ * 
+ * 
  *
  * For a list of syntaxes used you can visit Caethyrill and Archeia's
  * spreadsheet here :
@@ -839,3 +851,18 @@ PluginManager.registerCommand('Ryu_Core', 'SetAlias', args => {
     //Ryu.Utils.log(`Setting alias for ${type} as ${alias}`);
     Ryu.Utils.setAlias(type, alias, methods);
 });
+
+//TODO list and possible upgrades :
+/* Meta Data Handler
+ * Parsed Notetags & their data
+ * Simplified scripting (comments to launch basic scripts with shortened commands)
+ * 
+ * -- Extendable --
+ * Extend the Music Manager with loopable interchanges
+ * Custom Animations
+ * Custom Menu
+ * Custom Mechanics (Map, Skill tree, etc...)
+ * 
+ * Other ideas?
+ * 
+ */
